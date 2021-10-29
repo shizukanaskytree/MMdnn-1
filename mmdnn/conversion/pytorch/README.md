@@ -43,6 +43,10 @@ You can convert the whole pytorch model to IR structure. Please remember for the
 $ mmtoir -f pytorch -d resnet101 --inputShape 3,224,224 -n imagenet_resnet101.pth
 ```
 
+```bash
+$ mmtoir -f pytorch -d alexnet --inputShape 3,224,224 -n imagenet_alexnet.pth
+```
+
 Please bear in mind that always add `--inputShape` argparse. This thing is different from other framework because pytorch is a dynamic framework.
 
 Then you will get

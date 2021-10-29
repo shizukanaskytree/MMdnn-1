@@ -119,3 +119,8 @@ tests/tmp/
 # macOS
 # Desktop Services Store files
 .DS_Store
+
+alexnet.npy
+imagenet_alexnet.pth
+alexnet.json
+alexnet.pb

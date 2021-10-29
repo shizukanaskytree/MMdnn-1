@@ -78,7 +78,7 @@ class PytorchParser(Parser):
 
         # cpu: https://github.com/pytorch/pytorch/issues/5286
         try:
-            model = torch.load(model_file_name)
+            model = torch.load(model_file_name) # https://pytorch.org/docs/stable/generated/torch.load.html, 
         except:
             model = torch.load(model_file_name, map_location='cpu')
 
@@ -130,7 +130,7 @@ class PytorchParser(Parser):
         if not shape_pytorch:
             print("Warning: Pytorch cannot inference outputshape of \"{}\" with operator \"{}\". Setting outputshape manually in json file is alternative .".format(source_node.name, source_node.type))
             IR_node.attr["_output_shapes"].list.shape.extend([shape])
-            return 
+            return
 
         # (batch, C, H, W)  & NHWC
         if len(shape_pytorch) == 4:
@@ -164,11 +164,11 @@ class PytorchParser(Parser):
     def rename_UNKNOWN(self, source_node):
         print("PyTorch parser has not supported operator [%s] with name [%s]."
               % (source_node.type, source_node.name))
-        assert False      
+        assert False
         print(source_node.layer)
         print(source_node.layer.data.size())
-        
-        
+
+
 
 
     def gen_Input(self):
@@ -534,4 +534,4 @@ class PytorchParser151(PytorchParser):
 
     def get_weight_name(self, node):
         return self.pytorch_graph.layer_weight_map[node.name]
-    
+

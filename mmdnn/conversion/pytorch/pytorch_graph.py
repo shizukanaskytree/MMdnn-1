@@ -124,7 +124,7 @@ class PytorchGraph(Graph):
         dummy_input = torch.autograd.Variable(torch.randn(shape), requires_grad=False)
 
         graph, nodes = self.extractgraph(dummy_input)
-        
+
         # build each layer
         for node in nodes:
             node_id = PytorchGraph.get_node_id(node)
@@ -132,7 +132,7 @@ class PytorchGraph(Graph):
             output_str = node.__str__().split('=')[0]
             output_shape_str = re.findall(r'[^()!]+', output_str)
             if len(output_shape_str) > 1:
-                output_shape = [int(x.replace('!', '')) for x in output_shape_str[1].split(',')]
+                output_shape = [int(x.replace('!', '')) for x in output_shape_str[1].split(',')[:-1]]
             else:
                 output_shape = None
             self.shape_dict[node_name] = output_shape
@@ -172,7 +172,7 @@ class PytorchGraph040(PytorchGraph):
                     node_input_name = node_input.node().scopeName() + PytorchGraph.get_node_id(node_input.node())
                     node_input_name = node_input_name.replace('-','n').replace('\\','n').replace('/','n').replace('_','n').replace('[','n').replace(']','n')
                     self._make_connection(node_input_name, node_name)
-    
+
     def CreateGraphNode(self, node):
         return PytorchGraphNode040(node)
 
@@ -196,7 +196,7 @@ class PytorchGraph040(PytorchGraph):
         graph = torch._C._jit_pass_canonicalize(graph)
         torch._C._jit_pass_lint(graph)
         return graph
-    
+
     @contextlib.contextmanager
     def set_training(self, model, mode):
         r"""
@@ -230,7 +230,7 @@ class PytorchGraph151(PytorchGraph):
         with scope_name_workaround():
             graph = _trace(self.model, dummy_input, OperatorExportTypes.ONNX)
         nodes = list(graph.nodes())
-        
+
         for node in nodes:
             # print(node.__str__())
             node_id = PytorchGraph.get_node_id(node)
@@ -239,11 +239,11 @@ class PytorchGraph151(PytorchGraph):
                 re.findall(r'\[([\w\d.]+)\]', node.scopeName())
             )
         return graph, nodes
-    
+
     def rename_nodes(self, node, node_id):
         node_name = 'node' + node_id
         return node_name
-    
+
     def node_connection(self, graph, node, node_name):
         for node_input in list(node.inputs()):
             if PytorchGraph.get_node_id(node_input.node()) and node_input.node() in graph.nodes():
@@ -252,5 +252,5 @@ class PytorchGraph151(PytorchGraph):
 
     def CreateGraphNode(self, node):
         return PytorchGraphNode151(node)
-    
-    
+
+

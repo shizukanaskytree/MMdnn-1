@@ -1,3 +1,8 @@
+import debugpy
+debugpy.listen(5678)
+debugpy.wait_for_client()
+debugpy.breakpoint()
+
 import sys as _sys
 import google.protobuf.text_format as text_format
 from six import text_type as _text_type
